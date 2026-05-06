@@ -1,0 +1,205 @@
+/* ── Container & Layout ─────────────────────────────────────────────────── */
+.user-list-page {
+  padding: 32px 0;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  background: var(--color-surface);
+  padding: 16px 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 260px;
+  max-width: 420px;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--color-bg);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.search-input:focus {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 26, 43, 0.1);
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Table Card & Wrapper ─────────────────────────────────────────────────── */
+.table-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+.table-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Users Table ──────────────────────────────────────────────────────────── */
+.users-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 800px;
+}
+
+.users-table thead tr {
+  background: #f8fafc;
+}
+
+.users-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.users-table td {
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s ease;
+}
+
+.table-row {
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.table-row:last-child td {
+  border-bottom: none;
+}
+
+.table-row:hover td {
+  background: #fdfdfe;
+}
+
+.td-id    { color: var(--color-text-muted); font-weight: 600; width: 60px; }
+.td-name  { font-weight: 600; color: var(--color-text); }
+.td-email { color: var(--color-text-muted); }
+.td-gender { font-weight: 500; width: 80px; }
+.td-status { width: 140px; }
+.td-profile { width: 70px; }
+.td-action  { width: 120px; text-align: center; }
+
+/* ── Action Buttons ───────────────────────────────────────────────────────── */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.action-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-icon-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-icon-btn.view-btn:hover {
+  background: #e0f2fe;
+  color: var(--color-info);
+}
+
+.action-icon-btn.edit-btn:hover {
+  background: #fef08a;
+  color: var(--color-warning);
+}
+
+.action-icon-btn.delete-btn:hover {
+  background: #fee2e2;
+  color: var(--color-danger);
+}
+
+/* ── Table Footer ─────────────────────────────────────────────────────────── */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-count {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+  .toolbar-search {
+    max-width: 100%;
+  }
+  .toolbar-actions {
+    justify-content: stretch;
+  }
+  .toolbar-actions .btn {
+    flex: 1;
+  }
+  .table-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}
