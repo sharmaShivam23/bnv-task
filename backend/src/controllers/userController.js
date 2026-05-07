@@ -3,6 +3,7 @@ const { sendSuccess, sendError } = require('../utils/apiResponse');
 const { exportUsersToCSV } = require('../utils/csvExporter');
 const fs = require('fs');
 const path = require('path');
+const cloudinary = require('../config/cloudinary');
 
 // ─── GET ALL USERS (with pagination + search) ────────────────────────────────
 const getUsers = async (req, res, next) => {
@@ -74,7 +75,7 @@ const createUser = async (req, res, next) => {
     };
 
     if (req.file) {
-      userData.profileImage = req.file.filename;
+      userData.profileImage = req.file.path;
     }
 
     const user = await User.create(userData);
@@ -96,15 +97,20 @@ const updateUser = async (req, res, next) => {
 
     const updateData = { firstName, lastName, email, mobile, gender, status, location };
 
-    // If a new image was uploaded, remove the old one
+    // If a new image was uploaded
     if (req.file) {
       if (existing.profileImage) {
-        const oldImagePath = path.join(__dirname, '../../uploads', existing.profileImage);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
+        try {
+          // Attempt to extract public_id from Cloudinary URL and delete
+          const urlParts = existing.profileImage.split('/');
+          const filename = urlParts[urlParts.length - 1];
+          const publicId = 'bnv_users/' + filename.split('.')[0];
+          await cloudinary.uploader.destroy(publicId);
+        } catch (err) {
+          console.error("Failed to delete old image from Cloudinary:", err);
         }
       }
-      updateData.profileImage = req.file.filename;
+      updateData.profileImage = req.file.path;
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -127,11 +133,15 @@ const deleteUser = async (req, res, next) => {
       return sendError(res, 404, 'User not found');
     }
 
-    // Remove profile image from disk if exists
+    // Remove profile image from Cloudinary if exists
     if (user.profileImage) {
-      const imagePath = path.join(__dirname, '../../uploads', user.profileImage);
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+      try {
+        const urlParts = user.profileImage.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        const publicId = 'bnv_users/' + filename.split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Failed to delete image from Cloudinary:", err);
       }
     }
 
