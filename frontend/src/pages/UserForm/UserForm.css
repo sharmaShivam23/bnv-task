@@ -115,13 +115,12 @@
 .form-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: stretch;
   padding-top: 8px;
 }
 
-.form-actions .btn-primary {
-  min-width: 160px;
+.form-actions .submit-btn {
+  width: 100%;
 }
 
 /* ── Full-width Submit Bar (matching design) ──────────────────────────────── */

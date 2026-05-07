@@ -42,7 +42,7 @@ const UserForm = () => {
           status:    u.status    || '',
           location:  u.location  || '',
         })
-        if (u.profileImage) setExistingImage(`http://localhost:5000/uploads/${u.profileImage}`)
+        if (u.profileImage) setExistingImage(u.profileImage)
       } catch (err) {
         addToast(err.message || 'Failed to load user', 'error')
         navigate('/')
@@ -125,11 +125,8 @@ const UserForm = () => {
       <div className="container">
         <div className="form-page-header">
           <h1 className="form-page-title">
-            {isEdit ? 'Edit User Details' : 'Register Your Details'}
+            Register Your Details
           </h1>
-          <p className="form-page-subtitle">
-            {isEdit ? 'Update the information below' : 'Fill in the information below to create a new user'}
-          </p>
         </div>
 
         <div className="card form-card">
@@ -329,20 +326,12 @@ const UserForm = () => {
             {/* Actions */}
             <div className="form-actions">
               <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => navigate('/')}
-                disabled={submitting}
-              >
-                Cancel
-              </button>
-              <button
                 id="submit-btn"
                 type="submit"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary btn-full btn-lg submit-btn"
                 disabled={submitting}
               >
-                {submitting ? 'Saving...' : isEdit ? 'Update User' : 'Submit'}
+                Submit
               </button>
             </div>
           </form>

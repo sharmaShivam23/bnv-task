@@ -2,17 +2,17 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --color-primary:       #8B1A2B;
-  --color-primary-dark:  #6e1422;
-  --color-primary-light: #b02236;
-  --color-accent:        #c0392b;
+  --color-primary:       #954341;
+  --color-primary-dark:  #7a3634;
+  --color-primary-light: #ae5553;
+  --color-accent:        #954341;
   --color-bg:            #f5f6fa;
   --color-surface:       #ffffff;
   --color-border:        #e2e8f0;
-  --color-text:          #1a202c;
+  --color-text:          #333333;
   --color-text-muted:    #718096;
   --color-text-light:    #a0aec0;
-  --color-navbar:        #1a1a1a;
+  --color-navbar:        #1f2428;
   --color-success:       #27ae60;
   --color-warning:       #f39c12;
   --color-danger:        #e74c3c;

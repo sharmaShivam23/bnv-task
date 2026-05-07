@@ -5,7 +5,6 @@ import { useToast } from '../../hooks/useToast'
 import Pagination from '../../components/Pagination/Pagination'
 import StatusDropdown from '../../components/StatusDropdown/StatusDropdown'
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
-import DashboardStats from '../../components/DashboardStats/DashboardStats'
 import './UserList.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
@@ -21,6 +20,7 @@ const UserList = () => {
   const [page, setPage]             = useState(1)
   const [meta, setMeta]             = useState({ total: 0, totalPages: 1 })
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [activeDropdown, setActiveDropdown] = useState(null)
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -44,6 +44,10 @@ const UserList = () => {
 
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter') handleSearch()
+  }
+
+  const toggleDropdown = (userId) => {
+    setActiveDropdown((prev) => (prev === userId ? null : userId))
   }
 
   const handleStatusChange = (userId, newStatus) => {
@@ -76,8 +80,7 @@ const UserList = () => {
     addToast('CSV export started', 'info')
   }
 
-  const getProfileSrc = (filename) =>
-    filename ? `http://localhost:5000/uploads/${filename}` : null
+  const getProfileSrc = (filename) => filename ? filename : null
 
   const getInitials = (firstName, lastName) =>
     `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase()
@@ -87,7 +90,6 @@ const UserList = () => {
   return (
     <div className="user-list-page">
       <div className="container">
-        <DashboardStats />
         {/* ── Toolbar ── */}
         <div className="toolbar">
           <div className="toolbar-search">
@@ -122,7 +124,7 @@ const UserList = () => {
               <table className="users-table">
                 <thead>
                   <tr>
-                    <th>ID</th><th>Full Name</th><th>Email</th><th>Gender</th><th>Status</th><th>Profile</th><th>Action</th>
+                    <th>ID</th><th>FullName</th><th>Email</th><th>Gender</th><th>Status</th><th>Profile</th><th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,7 +154,7 @@ const UserList = () => {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Full Name</th>
+                    <th>FullName</th>
                     <th>Email</th>
                     <th>Gender</th>
                     <th>Status</th>
@@ -190,32 +192,27 @@ const UserList = () => {
                           </div>
                         )}
                       </td>
-                      <td className="td-action">
+                      <td className="td-action" style={{ position: 'relative' }}>
                         <div className="action-buttons">
                           <button
-                            id={`view-btn-${user._id}`}
-                            className="action-icon-btn view-btn"
-                            onClick={() => navigate(`/users/${user._id}`)}
-                            title="View"
+                            className="action-dots-btn"
+                            onClick={() => toggleDropdown(user._id)}
                           >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            ⋮
                           </button>
-                          <button
-                            id={`edit-btn-${user._id}`}
-                            className="action-icon-btn edit-btn"
-                            onClick={() => navigate(`/users/${user._id}/edit`)}
-                            title="Edit"
-                          >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                          </button>
-                          <button
-                            id={`delete-btn-${user._id}`}
-                            className="action-icon-btn delete-btn"
-                            onClick={() => setDeleteTarget(user)}
-                            title="Delete"
-                          >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                          </button>
+                          {activeDropdown === user._id && (
+                            <div className="action-dropdown-menu">
+                              <button onClick={() => navigate(`/users/${user._id}`)}>
+                                <span className="icon view-icon">👁</span> View
+                              </button>
+                              <button onClick={() => navigate(`/users/${user._id}/edit`)}>
+                                <span className="icon edit-icon">📝</span> Edit
+                              </button>
+                              <button onClick={() => { setDeleteTarget(user); setActiveDropdown(null); }}>
+                                <span className="icon delete-icon">🗑</span> Delete
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
